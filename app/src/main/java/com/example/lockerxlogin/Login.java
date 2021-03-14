@@ -123,8 +123,7 @@ public class Login extends AppCompatActivity {
                                             @Override
                                             public void onFailure(@NonNull Exception e){
                                                 Log.d("TAG", "OnFailure: Email not sent " +e.getMessage());
-                                                LProgressBar.setVisibility(View.GONE);
-                                            }
+                                                LProgressBar.setVisibility(View.GONE);}
 
                                         });
 

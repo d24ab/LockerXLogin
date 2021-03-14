@@ -33,10 +33,12 @@ public class UserController {
         //deduct late fees first when making a booking
         if(Login.currUser.getLateFees()>0){
             if(makePayment(Login.currUser.getLateFees())==false){
+                System.out.println("outcome 1");
                 return false;
             }
             else {
                 updateUserLateFees(0);
+                System.out.println("outcome 2");
             }
         }
 
@@ -45,9 +47,11 @@ public class UserController {
         if(makePayment(rentalFees)==true){
             bc.makeBooking(Login.currUser.getMobile(),structureID,lockerID,startDate,startTime,endDate,endTime);
             //creates a new booking object and stores it in database using database controller
+            System.out.println("outcome 3");
             return true;
         }
         else
+            System.out.println("outcome 4");
             return false;
     }
 

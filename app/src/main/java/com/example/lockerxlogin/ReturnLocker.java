@@ -6,7 +6,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -95,14 +97,14 @@ public class ReturnLocker extends AppCompatActivity {
         //rLocation.setText(location);
         rbookedDate.setText(startDate+" - "+endDate);
         rbookedTime.setText(startTime+" - "+endTime);
-       // rtextSize.setText(size);
-       // rtextTotalPay.setText(totalPay);
+        // rtextSize.setText(size);
+        // rtextTotalPay.setText(totalPay);
         rtextLockerid.setText(lockerid);
         rtextLockerStructureid.setText(structureid);
 
         String strs = startDate +" "+ startTime;//2021-04-21 13:00:00
         String stre = endDate +" "+ endTime;//2021-04-21 13:00:00
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime sdateTime = LocalDateTime.parse(strs, formatter);
         LocalDateTime edateTime = LocalDateTime.parse(stre, formatter);
         Duration d = Duration.between(sdateTime,edateTime);
@@ -128,27 +130,16 @@ public class ReturnLocker extends AppCompatActivity {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     public void onClick(DialogInterface dialog,
                                         int which) {
+                        ReturnLocker.CalculateLateFeesThread runnable2 = new ReturnLocker.CalculateLateFeesThread();
+                        new Thread(runnable2).start();
+                      /*  FragmentManager fm =getSupportFragmentManager();
+                        FragmentTransaction ft = fm.beginTransaction();
+                        WalletFragment lf = new WalletFragment();
+                        ft.replace(R.id.walletFragment,lf);
+                        ft.commit();*/
 
-                       if( uc.calculateLateFees(LocalDate.parse(endDate),LocalTime.parse(endTime))!=0){
-                           FragmentManager fm =getSupportFragmentManager();
-                           FragmentTransaction ft = fm.beginTransaction();
-                           WalletFragment lf = new WalletFragment();
-                           ft.replace(R.id.walletFragment,lf);
-                           ft.commit();
-                       }
-                       else {
-                           //TODO change status
 
-                           Toast.makeText(getApplicationContext(), "Yes is clicked", Toast.LENGTH_LONG).show();
-                           dc.setBookingStatus(mobile,Long.parseLong(structureid),Long.parseLong(lockerid),
-                                   LocalDate.parse(startDate),LocalTime.parse(startTime),
-                                   LocalDate.parse(endDate),LocalTime.parse(endTime),'R');
-                           FragmentManager fm = getSupportFragmentManager();
-                           FragmentTransaction ft = fm.beginTransaction();
-                           LockersFragment lf = new LockersFragment();
-                           ft.replace(R.id.lockersFragment, lf);
-                           ft.commit();
-                       }
+
                     }
                 });
         dialog.setNegativeButton("cancel",new DialogInterface.OnClickListener() {
@@ -184,13 +175,6 @@ public class ReturnLocker extends AppCompatActivity {
                 Log.d("TAG", location + " Here is the location");
 
 
-//                rLocation.setText(location);
-
-
-               // rtextTotalPay.setText(totalPay);
-
-
-
 
                 try {
                     Thread.sleep(1);
@@ -199,7 +183,7 @@ public class ReturnLocker extends AppCompatActivity {
                 }
 
 
-                if (size!='a') {
+                if (size!='a' && location != null) {
                     Log.d("HERE" , "Locker size is " + size);
                     Log.d("HERE" , "Location is is " + location);
                     float d = bc.calculateRentalFees(Long.parseLong(structureid),Long.parseLong(lockerid), LocalDate.parse(startDate),
@@ -215,6 +199,8 @@ public class ReturnLocker extends AppCompatActivity {
                                 rtextSize.setText(Character.toString(size));
                                 rLocation.setText(location);
                                 rtextTotalPay.setText(totalPay);
+                                Log.d("a","Closing retrieve locker details thread");
+                                return;
 
                             }
                         });
@@ -246,4 +232,112 @@ public class ReturnLocker extends AppCompatActivity {
     public void stopThread(View view){
         stopThread = true;
     }
+
+
+    class CalculateLateFeesThread implements Runnable{
+        CalculateLateFeesThread(){
+            //
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        @Override
+        public void run() {
+            //TODO place code here to run for this thread
+
+
+
+            for (int i = 0; i < 100000; i++) {
+                Log.d("TAG", "HIHIHI" + i);
+                float lateFeesPlaceHolder = uc.calculateLateFees(LocalDate.parse(endDate),LocalTime.parse(endTime));
+//                float lateFeesFloatComparator = 0;
+//                float newLateFees = 0;
+
+
+
+
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
+                if (lateFeesPlaceHolder >= 0) {
+                    Log.d("A", "Late fees calculated");
+
+
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            RprogressBar.setVisibility(View.GONE);
+                            if( lateFeesPlaceHolder >= 0){
+                                float newLateFees = Login.currUser.getLateFees() + lateFeesPlaceHolder;
+                                //dc.updateLateFees(Login.currUser.getMobile(), newLateFees);
+                                uc.updateUserLateFees(1);
+
+                                dc.setBookingStatus(mobile,Long.parseLong(structureid),Long.parseLong(lockerid),
+                                        LocalDate.parse(startDate),LocalTime.parse(startTime),
+                                        LocalDate.parse(endDate),LocalTime.parse(endTime),'R');
+
+                                Log.d("a","Going into wallet fragment");
+                                startActivity(new Intent(getApplicationContext(), MainFunc.class));
+                              /*  FragmentManager fm =getSupportFragmentManager();
+                                FragmentTransaction ft = fm.beginTransaction();
+                                WalletFragment lf = new WalletFragment();
+                                ft.replace(R.id.walletFragment,lf);
+                                ft.commit();*/
+                            }
+                            else {
+                             /*   //TODO change status
+                                Log.d("a","Going into locker fragment");
+
+                                Toast.makeText(getApplicationContext(), "Yes is clicked", Toast.LENGTH_LONG).show();
+                                dc.setBookingStatus(mobile,Long.parseLong(structureid),Long.parseLong(lockerid),
+                                        LocalDate.parse(startDate),LocalTime.parse(startTime),
+                                        LocalDate.parse(endDate),LocalTime.parse(endTime),'R');
+                               /* FragmentManager fm = getSupportFragmentManager();
+                                FragmentTransaction ft = fm.beginTransaction();
+                                LockersFragment lf = new LockersFragment();
+                                ft.replace(R.id.lockersFragment, lf);
+                                ft.commit();*/
+                                // startActivity(new Intent(getApplicationContext(), MainFunc.class));
+                            }
+
+                        }
+
+                    });
+
+
+                    stopThread = true;
+                    if (stopThread) {
+                        //dbProgressBar.setVisibility(View.GONE);
+
+
+
+                        return;
+                    }
+                }
+
+            }
+
+        }
+
+    }
+
+
+    public void startLateFeesThread(View view){
+        stopThread = false;
+        ReturnLocker.CalculateLateFeesThread runnable = new ReturnLocker.CalculateLateFeesThread();
+        new Thread(runnable).start();
+
+    }
+    public void stopLateFeesThread(View view){
+        stopThread = true;
+    }
+
+
+
+
 }

@@ -27,25 +27,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="10sp"
-                        android:id="@+id/search_booking_id_item_tv"
-                        android:hint="Booking Id"
-                        android:layout_alignParentLeft="true"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="10sp"
-                        android:id="@+id/search_mobile_item_tv"
-                        android:hint="mobile"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="10dp"/>
-                </RelativeLayout>
+                    android:layout_height="match_parent"/>
 
 
                 <RelativeLayout
@@ -65,25 +47,9 @@
                             android:hint="Locker Id"
                             android:layout_alignParentLeft="true"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="10sp"
-                            android:id="@+id/search_structure_id_item_tv"
-                            android:hint="structure"
-                            android:layout_marginLeft="10dp"/>
                     </LinearLayout>
 
 
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="10sp"
-                        android:id="@+id/search_status_item_tv"
-                        android:hint="status"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="10dp"/>
                 </RelativeLayout>
 
             </LinearLayout>
@@ -94,42 +60,17 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/search_locker_structure_id_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="10sp"
-                    android:id="@+id/search_start_date_item_tv"
+                    android:layout_gravity="right"
                     android:hint="start date"
-                    android:layout_gravity="right"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="10sp"
-                    android:id="@+id/search_start_time_item_tv"
-                    android:hint="start time"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"/>
+                    android:textSize="10sp" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="10sp"
-                    android:id="@+id/search_end_date_item_tv"
-                    android:hint="end date"
-                    android:layout_gravity="right"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="10sp"
-                    android:id="@+id/search_end_time_item_tv"
-                    android:hint="end time"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"/>
-            </RelativeLayout>
+                android:layout_height="match_parent"/>
 
 
 

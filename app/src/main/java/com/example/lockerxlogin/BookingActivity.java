@@ -71,8 +71,9 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
     DatePicker BdatePick;
     FirebaseAuth fAuth;
     FirebaseUser FBuser;
-    String postal,size,title;
-    ArrayList<Locker> avalockers;
+    String postal;
+    String size;
+    String title;
 
 
 
@@ -102,12 +103,12 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
         cal = Calendar.getInstance();
 
         mYear = cal.get(Calendar.YEAR);
-        mMonth = cal.get(Calendar.MONTH)+1;
+        mMonth = cal.get(Calendar.MONTH);
         mDay = cal.get(Calendar.DAY_OF_MONTH);
-        shour = cal.get(Calendar.HOUR_OF_DAY);
-        sminute =cal.get(Calendar.MINUTE);
-        ehour = cal.get(Calendar.HOUR_OF_DAY);
-        eminute =cal.get(Calendar.MINUTE);
+        //shour = cal.get(Calendar.HOUR_OF_DAY);
+        //sminute =cal.get(Calendar.MINUTE);
+        //ehour = cal.get(Calendar.HOUR_OF_DAY);
+        //eminute =cal.get(Calendar.MINUTE);
         //setTitle(year+"-"+month+"-"+day+"-"+hour+"-"+minute);
 
 
@@ -133,20 +134,20 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 // your code here
                 if (BspinnerSize.getSelectedItem().toString().equals("small (30x40x30cm)")) {
-                    size = "S";
+                    size = "Small (30x40x30cm)";
                 }
                 if (BspinnerSize.getSelectedItem().toString().equals("medium (40x50x40cm)")) {
-                   size = "M";
+                   size = "Medium (40x50x40cm)";
                 }
                 if (BspinnerSize.getSelectedItem().toString().equals("large (60x60x60cm)")) {
-                    size = "L";
+                    size = "Large (60x60x60cm)";
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
                 // your code here
-                size = "S";
+                size = "Small (30x40x30cm)";
                 return;
             }
         });
@@ -184,46 +185,12 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.searchBtn:
-
-               // alertDialog();
                 searchAvailableLocker();
-                //getAvaiLockers();
-
-
 
                 break;
             default:
 
         }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void getAvaiLockers() {
-
-        //start new thread + loading screen!
-        ArrayList<Booking> bBookings = dc.retrieveBBookings();
-        ArrayList<Locker> availLockers = dc.retrieveMatchingLockers(postal, size.charAt(0));
-        //end thread but still keep loading screen or
-        //end thread then start new thread + loading screen
-        ArrayList<Long> unavailLockers = new ArrayList<Long>();
-
-        for (Booking booking : bBookings) {
-            if ((booking.getStartDate().compareTo(startDate)>=0 && booking.getStartDate().compareTo(endDate)<=0) ||
-                    (booking.getEndDate().compareTo(startDate)>=0 && booking.getEndDate().compareTo(endDate)<=0) ||
-                    (booking.getStartDate().compareTo(startDate)<=0 && booking.getEndDate().compareTo(endDate)>=0)) {
-                if ((booking.getStartTime().compareTo(startTime)>=0 && booking.getStartTime().compareTo(endTime)<=0) ||
-                        (booking.getEndTime().compareTo(startTime)>=0 && booking.getEndTime().compareTo(endTime)<=0) ||
-                        (booking.getStartTime().compareTo(startTime)<=0 && booking.getEndTime().compareTo(endTime)>=0)) {
-                    unavailLockers.add(booking.getLockerID());
-                }
-            }
-        }
-        for (Locker locker : availLockers) {
-            if (unavailLockers.contains(locker.getLockerID())) {
-                availLockers.remove(locker);
-            }
-        }
-        avalockers = availLockers;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -234,21 +201,34 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
         }
         else if (startDate.compareTo(java.time.LocalDate.now()) == 0 && startDate.compareTo(endDate) == 0){
             if (startTime.compareTo(java.time.LocalTime.now())<0){
+                //System.out.print(startTime.compareTo(endTime));
                alertDialog();
+
             }
             else if (startTime.compareTo(endTime) >0){
                alertDialog();
+
             }
             else {
-              //  Intent intent = new Intent(this, AvailableLockers.class);
-                //startActivity(new Intent(getApplicationContext(), AvailableLockers.class));
-               // intent.putExtra("title", title);
-                getAvaiLockers();
                 Intent intent = new Intent(this, AvailableLockers.class);
-                //intent.putExtra("title", title);  //pass location
-                intent.putExtra("avlockers",avalockers);
-
-                //avail lockers that can be booked for the user's selection: ArrayList<Locker> availLockers
+                intent.putExtra("postal", postal);
+                intent.putExtra("size", size);
+                intent.putExtra("sTimeHour", shour);
+                intent.putExtra("sTimeMin", sminute);
+                intent.putExtra("eTimeHour", ehour);
+                intent.putExtra("eTimeMinute",eminute);
+                intent.putExtra("sDateYear",sYear);
+                intent.putExtra("sDateMonth",sMonth);
+                intent.putExtra("sDateDay",sDay);
+                intent.putExtra("eDateYear",eYear);
+                intent.putExtra("eDateMonth",eMonth);
+                intent.putExtra("eDateDay",eDay);
+                intent.putExtra("location", title);
+                //intent.putExtra("startTime", startTime.toString());
+                //intent.putExtra("endTime", endTime.toString());
+                //intent.putExtra("startDate", startDate.toString());
+                //intent.putExtra("endDate", endDate.toString());
+                startActivity(intent);
             }
         }
         else if (startDate.compareTo(endDate) == 0){
@@ -258,31 +238,44 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
 
             }
             else{
-
-                //startActivity(new Intent(getApplicationContext(), AvailableLockers.class));//AvailableLockers
-
-                getAvaiLockers();
                 Intent intent = new Intent(this, AvailableLockers.class);
-                //intent.putExtra("title", title);  //pass location
-                intent.putExtra("avlockers",avalockers);
-                //avail lockers that can be booked for the user's selection: ArrayList<Locker> availLockers
-
+                intent.putExtra("postal", postal);
+                intent.putExtra("size", size);
+                intent.putExtra("sTimeHour", shour);
+                intent.putExtra("sTimeMin", sminute);
+                intent.putExtra("eTimeHour", ehour);
+                intent.putExtra("eTimeMinute",eminute);
+                intent.putExtra("sDateYear",sYear);
+                intent.putExtra("sDateMonth",sMonth);
+                intent.putExtra("sDateDay",sDay);
+                intent.putExtra("eDateYear",eYear);
+                intent.putExtra("eDateMonth",eMonth);
+                intent.putExtra("eDateDay",eDay);
+                intent.putExtra("location", title);
+                startActivity(intent);
             }
         }
         else {
 
-            getAvaiLockers();
             Intent intent = new Intent(this, AvailableLockers.class);
-            //intent.putExtra("title", title);  //pass location
-            intent.putExtra("avlockers",avalockers);
-            //avail lockers that can be booked for the user's selection: ArrayList<Locker> availLockers
-            //intent.putExtra("title", title);//pass location
-
+            intent.putExtra("postal", postal);
+            intent.putExtra("size", size);
+            intent.putExtra("sTimeHour", shour);
+            intent.putExtra("sTimeMin", sminute);
+            intent.putExtra("eTimeHour", ehour);
+            intent.putExtra("eTimeMinute",eminute);
+            intent.putExtra("sDateYear",sYear);
+            intent.putExtra("sDateMonth",sMonth);
+            intent.putExtra("sDateDay",sDay);
+            intent.putExtra("eDateYear",eYear);
+            intent.putExtra("eDateMonth",eMonth);
+            intent.putExtra("eDateDay",eDay);
+            intent.putExtra("location", title);
+            startActivity(intent);
 
         }
     }
     private void alertDialog() {
-        //final androidx.appcompat.app.AlertDialog.Builder continueBookingDialog = new AlertDialog.Builder();
         AlertDialog.Builder dialog=new AlertDialog.Builder(this);
         dialog.setMessage("Please choose valid start date, end date and start time, end time!");
         dialog.setTitle("Dialog Box");
@@ -312,10 +305,11 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onTimeSet(TimePicker view, int hour, int minute) {
 
-
                 cal.set(Calendar.HOUR_OF_DAY, hour);
                 cal.set(Calendar.MINUTE, minute);
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                shour = hour;
+                sminute = minute;
 
                 BselectedStart.setText("Start time: "+sdf.format(cal.getTime()));//change to selected time
                 startTime = LocalTime.of(hour, minute);
@@ -338,8 +332,11 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                 cal.set(Calendar.MINUTE, minute);
 
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                BselectedEnd.setText("End time: "+sdf.format(cal.getTime()));//change to selected time
+
                 endTime = LocalTime.of(hour, minute);
+                ehour = hour;
+                eminute = minute;
+                BselectedEnd.setText("End time: "+sdf.format(cal.getTime()));//change to selected time
 
             }
         }, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);

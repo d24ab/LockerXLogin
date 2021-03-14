@@ -25,7 +25,7 @@
         <activity android:name=".ReturnLocker" />
         <activity android:name=".CancelBooking" />
         <activity android:name=".BookingInfo" />
-        <activity android:name=".AvailableLockers" />
+        <activity android:name=".AvailableLockers"/>
         <activity android:name=".BookingActivity" />
         <activity android:name=".ChangePassword" />
 
