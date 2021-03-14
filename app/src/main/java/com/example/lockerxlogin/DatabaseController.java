@@ -17,6 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class DatabaseController {
@@ -263,31 +264,39 @@ public class DatabaseController {
         ds.setBooking(booking);
 
         Query query = FirebaseDatabase.getInstance().getReference().child("Booking").orderByChild("mobile").equalTo(mobile);
+        Log.d(TAG, "setBookingStatus: after setting query");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d(TAG, "onDataChange: inside on datachange");
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     if (LocalDate.parse(dataSnapshot.child("startDate").getValue().toString()).compareTo(ds.getBooking().getStartDate())==0) {
+                        Log.d(TAG, "onDataChange: same startDate");
                         if (LocalDate.parse(dataSnapshot.child("endDate").getValue().toString()).compareTo(ds.getBooking().getEndDate())==0) {
+                            Log.d(TAG, "onDataChange: same endDate");
                             if (LocalTime.parse(dataSnapshot.child("startTime").getValue().toString()).compareTo(ds.getBooking().getStartTime()) == 0) {
+                                Log.d(TAG, "onDataChange: same startTime");
                                 if (LocalTime.parse(dataSnapshot.child("endTime").getValue().toString()).compareTo(ds.getBooking().getEndTime()) == 0) {
+                                    Log.d(TAG, "onDataChange: same endTime");
                                     if (Long.parseLong(dataSnapshot.child("structureID").getValue().toString())==ds.getBooking().getStructureID()) {
-                                        if (Long.parseLong(dataSnapshot.child("lockerID").getValue().toString())==ds.getBooking().getStructureID()) {
+                                        Log.d(TAG, "onDataChange: same structureID");
+                                        if (Long.parseLong(dataSnapshot.child("lockerID").getValue().toString())==ds.getBooking().getLockerID()) {
+                                            Log.d(TAG, "onDataChange: same lockerID");
                                             String key = dataSnapshot.getKey();
                                             Log.d(TAG, "onDataChange: key of the matching booking=" +key);
                                             Log.d(TAG, "onDataChange: old status=" + dataSnapshot.child("status").getValue().toString());
                                             DatabaseReference reff = FirebaseDatabase.getInstance().getReference().child("Booking");
                                             Map<String, Object> statusUpdate = new HashMap<>();
-                                            statusUpdate.put("status", ds.getBooking().getStatus());
+                                            statusUpdate.put("status", Character.toString(ds.getBooking().getStatus()));
                                             reff.child(key).updateChildren(statusUpdate);
-                                            Log.d(TAG, "onDataChange: new status=" + dataSnapshot.child("status").getValue().toString());
                                             query.removeEventListener(new ValueEventListener() {
                                                 @Override
                                                 public void onDataChange(@NonNull DataSnapshot snapshot) {}
                                                 @Override
                                                 public void onCancelled(@NonNull DatabaseError error) {}
                                             });
+//                                            Log.d(TAG, "onDataChange: new status=" + dataSnapshot.child("status").getValue().toString());
                                         }
                                     }
                                 }
@@ -299,7 +308,7 @@ public class DatabaseController {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Log.d(TAG, "onCancelled: oncancelled");
             }
         });
     }
@@ -349,17 +358,19 @@ public class DatabaseController {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void createBooking(String mobile, long structureID, long lockerID,
                               LocalDate startDate, LocalTime startTime,
                               LocalDate endDate, LocalTime endTime, char status) {
         DatabaseReference reff = FirebaseDatabase.getInstance().getReference().child("Booking").push();
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         reff.child("mobile").setValue(mobile);
         reff.child("structureID").setValue(structureID);
         reff.child("lockerID").setValue(lockerID);
         reff.child("startDate").setValue(startDate.toString());
-        reff.child("startTime").setValue(startTime.toString());
+        reff.child("startTime").setValue(startTime.format(timeFormatter));
         reff.child("endDate").setValue(endDate.toString());
-        reff.child("endTime").setValue(endTime.toString());
+        reff.child("endTime").setValue(endTime.format(timeFormatter));
         reff.child("status").setValue(Character.toString(status));
         Log.d(TAG, "createBooking: booking created");
     }

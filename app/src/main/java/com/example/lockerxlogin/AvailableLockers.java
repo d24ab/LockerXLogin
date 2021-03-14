@@ -31,18 +31,9 @@ public class AvailableLockers extends AppCompatActivity {
     public static LocalTime startTime, endTime;
     public static int sDateYear, sDateMonth, sDateDay, eDateYear, eDateMonth, eDateDay,
             sTimeHour, sTimeMin, eTimeHour, eTimeMin;
-    private long lockerID, structureID;
     public static String postal, location;
     public static String size;
     public boolean stopThread;
-    public boolean returnToMain;
-    public ArrayList<BookingSearchArr> bookingSearchArr;
-    public ArrayList<Locker> availbleLocker = new ArrayList<Locker>();
-
-    //ArrayList<Locker> bookingSearchArr = new ArrayList<Locker>();
-
-
-
 
     DatabaseController dc = new DatabaseController();
 
@@ -65,7 +56,7 @@ public class AvailableLockers extends AppCompatActivity {
         sTimeHour = this.getIntent().getIntExtra("sTimeHour",0);
         sTimeMin = this.getIntent().getIntExtra("sTimeMin",0);
         eTimeHour = this.getIntent().getIntExtra("eTimeHour",0);
-        eTimeMin = this.getIntent().getIntExtra("eTimeMin",0);
+        eTimeMin = this.getIntent().getIntExtra("eTimeMinute",0);
 
         Calendar c = Calendar.getInstance();
         c.set(Calendar.YEAR, sDateYear);
@@ -81,6 +72,8 @@ public class AvailableLockers extends AppCompatActivity {
         startTime = LocalTime.of(sTimeHour, sTimeMin);
         endTime = LocalTime.of(eTimeHour, eTimeMin);
 
+        System.out.println(endTime);
+
         //returnToMain=false;
 
         AvailableLockers.BookingMultiThread dbThread = new AvailableLockers.BookingMultiThread();
@@ -88,24 +81,6 @@ public class AvailableLockers extends AppCompatActivity {
         t.start();
 
         setContentView(R.layout.activity_available_lockers);
-
-
-
-
-        /*
-        ArrayList<Viewholder_Booking> exampleList = new ArrayList<>();
-        exampleList.add(new Viewholder_Booking( "Line 1", "Line 2"));
-        exampleList.add(new Viewholder_Booking( "Line 3", "Line 4"));
-        exampleList.add(new Viewholder_Booking( "Line 5", "Line 6"));*/
-
-        /*ArrayList <String> lockerArray = new ArrayList<String>();
-        mRecyclerView = findViewById(R.id.recyclerView);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        // mRecyclerView.setAdapter(new BookingHistoryArrAdapter(bookingHistoryArr));
-        mAdapter = mRecyclerView.getAdapter();
-        if(mAdapter!=null) Log.d("TAG", "There is an mAdapter");
-        ArrayList<BookingHistoryArr> insert= new ArrayList<BookingHistoryArr>();*/
 
     }
 

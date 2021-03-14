@@ -112,7 +112,7 @@ public class BookingHistoryArrAdapter extends RecyclerView.Adapter<BookingHistor
                     holder.getStatus().setTextColor(Color.parseColor("#2a9d8f"));
                     showDialogForFuture(v);
 
-                } else if (bha.getStatus() == '0') {
+                } else if (bha.getStatus() == 'O') {
                     holder.getStatus().setTextColor(Color.parseColor("#2a9d8f"));
                     showDialogPresent(v);
                 }else if (bha.getStatus() == 'C') {

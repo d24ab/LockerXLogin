@@ -45,7 +45,7 @@ public class CancelBooking extends AppCompatActivity {
     private String structureid;
     private String mobile;
     private String location;
-    private char size = 'a';
+    private char size;
     private String totalPay;
     private String duration;
     private Handler mainHandler = new Handler();

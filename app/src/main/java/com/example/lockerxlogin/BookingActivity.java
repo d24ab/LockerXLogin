@@ -103,7 +103,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
         cal = Calendar.getInstance();
 
         mYear = cal.get(Calendar.YEAR);
-        mMonth = cal.get(Calendar.MONTH)+1;
+        mMonth = cal.get(Calendar.MONTH);
         mDay = cal.get(Calendar.DAY_OF_MONTH);
         //shour = cal.get(Calendar.HOUR_OF_DAY);
         //sminute =cal.get(Calendar.MINUTE);
@@ -185,11 +185,7 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.searchBtn:
-
-               // alertDialog();
                 searchAvailableLocker();
-
-
 
                 break;
             default:
@@ -256,10 +252,6 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                 intent.putExtra("eDateMonth",eMonth);
                 intent.putExtra("eDateDay",eDay);
                 intent.putExtra("location", title);
-                //intent.putExtra("startTime", startTime.toString());
-                //intent.putExtra("endTime", endTime.toString());
-                //intent.putExtra("startDate", startDate.toString());
-                //intent.putExtra("endDate", endDate.toString());
                 startActivity(intent);
             }
         }
@@ -280,17 +272,10 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
             intent.putExtra("eDateDay",eDay);
             intent.putExtra("location", title);
             startActivity(intent);
-            //intent.putExtra("startTime", startTime.toString());
-            //intent.putExtra("endTime", endTime.toString());
-            //intent.putExtra("startDate", startDate.toString());
-            //intent.putExtra("endDate", endDate.toString());
-            //startActivity(new Intent(getApplicationContext(), AvailableLockers.class));//AvailableLockers
-
 
         }
     }
     private void alertDialog() {
-        //final androidx.appcompat.app.AlertDialog.Builder continueBookingDialog = new AlertDialog.Builder();
         AlertDialog.Builder dialog=new AlertDialog.Builder(this);
         dialog.setMessage("Please choose valid start date, end date and start time, end time!");
         dialog.setTitle("Dialog Box");
@@ -320,7 +305,6 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onTimeSet(TimePicker view, int hour, int minute) {
 
-
                 cal.set(Calendar.HOUR_OF_DAY, hour);
                 cal.set(Calendar.MINUTE, minute);
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
@@ -348,10 +332,11 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                 cal.set(Calendar.MINUTE, minute);
 
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                BselectedEnd.setText("End time: "+sdf.format(cal.getTime()));//change to selected time
+
                 endTime = LocalTime.of(hour, minute);
                 ehour = hour;
                 eminute = minute;
+                BselectedEnd.setText("End time: "+sdf.format(cal.getTime()));//change to selected time
 
             }
         }, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);

@@ -62,37 +62,39 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
 
         View myView = inflater.inflate(R.layout.fragment_lockers, container, false);
         //Start multi thread here.
-        LockersFragment.RetrieveBookingThread runnable = new LockersFragment.RetrieveBookingThread();
-        user = Login.currUser;
-        currUserMobile = user.getMobile();
-        new Thread(runnable).start();
+//        LockersFragment.RetrieveBookingThread runnable = new LockersFragment.RetrieveBookingThread();
+////        user = Login.currUser;
+//     //   currUserMobile = user.getMobile();
+//
+//        new Thread(runnable).start();
 
 
 
 
-        /*ArrayList<BookingHistoryArr> bookingHistoryArr = new ArrayList<BookingHistoryArr>();
+        ArrayList<BookingHistoryArr> bookingHistoryArr = new ArrayList<BookingHistoryArr>();
         bookingHistoryArr.add(new BookingHistoryArr("1","2021-02-17",
                 "16:00:00","3","91237777", "2021-02-17",
                 "13:00:00","R", "1"));
         bookingHistoryArr.add(new BookingHistoryArr("2","2021-03-02",
                 "16:00:00","2","91237777", "2021-03-02",
-                "14:00:00","R", "2"));
+                "14:00:00","B", "2"));
         bookingHistoryArr.add(new BookingHistoryArr("3","2021-02-19",
                 "13:00:00","1","90059608", "2021-02-19",
-                "12:00:00","R", "1"));
+                "12:00:00","O", "1"));
         bookingHistoryArr.add(new BookingHistoryArr("4","2021-04-21",
                 "19:00:00","3","90059608", "2021-04-21",
-                "13:00:00","B", "2"));*/
+                "13:00:00","R", "2"));
 
 
         mRecyclerView = myView.findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(myView.getContext()));
-      //  mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setHasFixedSize(true);
 
-       // mAdapter = new ExampleAdapter(exampleList);
-       // mRecyclerView.setLayoutManager(mLayoutManager);
-       // mRecyclerView.setAdapter(mAdapter);
+        // mAdapter = new ExampleAdapter(exampleList);
+        // mRecyclerView.setLayoutManager(mLayoutManager);
+        // mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(new BookingHistoryArrAdapterHardcode(bookingHistoryArr));
 
         //mRecyclerView.setLayoutManager(new LinearLayoutManager(myView.getContext()));
         //mRecyclerView.setAdapter(mAdapter);
@@ -102,9 +104,9 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
 //        lockerArray.add("testLockerID");
 
 //        mLayoutManager = new LinearLayoutManager(getActivity());
-      //  mAdapter = new MainAdapter(lockerArray);
-      //  mRecyclerView.setLayoutManager(mLayoutManager);
-     //   mRecyclerView.setAdapter(mAdapter);
+        //  mAdapter = new MainAdapter(lockerArray);
+        //  mRecyclerView.setLayoutManager(mLayoutManager);
+        //   mRecyclerView.setAdapter(mAdapter);
 
         return myView;
     }
@@ -140,12 +142,19 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
 
 
 
-            for (int i = 0; i < 100000000; i++) {
+
+            for(int i = 1 ; i< 100000; i++) {
                 DatabaseController dc = new DatabaseController();
                 UserController uc = new UserController();
                 //bookingHistoryArr = uc.getUserLockers("90000001");
-                bookingHistoryArr = uc.getUserLockers(currUserMobile);
-                userBookingCount = dc.retrieveUserBookingCount(currUserMobile);
+                user = Login.currUser;
+                currUserMobile = user.getMobile();
+
+
+                if(currUserMobile!= null) {
+                    bookingHistoryArr = uc.getUserLockers(currUserMobile);
+                    userBookingCount = dc.retrieveUserBookingCount(currUserMobile);
+                }
 //
 
                 try {
@@ -154,12 +163,12 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
                     e.printStackTrace();
                 }
 
-                if(bookingHistoryArr.size() == 2){
+                if(bookingHistoryArr.size() >0){
                     stopThread = true;
                     if (stopThread){
                         //dbProgressBar.setVisibility(View.GONE);
-                        Log.d("TAG", "Stopping thread");
-                       // Log.d("TAG", bookingHistoryArr.get(0).getMobile());
+
+                        // Log.d("TAG", bookingHistoryArr.get(0).getMobile());
 
                         getActivity().runOnUiThread(new Runnable(){
 
@@ -167,22 +176,28 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
                             public void run() {
                                 Log.d("TAG", "Setting the adapater now");
 
+
                                 mRecyclerView.setAdapter(new BookingHistoryArrAdapter(bookingHistoryArr));
+
                             }
                         });
+                        Log.d("TAG", "Stopping thread from if else statement");
                         return;}
                 }
                 Log.d("TAG", "i value is " +i );
-
-
-
-                }
+                i++;
 
 
 
             }
+            Log.d("TAG", "Stopping thread");
+            return;
+
+
 
         }
+
+    }
 
 
     public void startThread(View view){
@@ -195,7 +210,3 @@ public class LockersFragment extends Fragment implements View.OnClickListener {
         stopThread = true;
     }
 }
-
-
-
-
