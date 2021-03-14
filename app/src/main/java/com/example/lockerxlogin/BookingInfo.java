@@ -57,7 +57,7 @@ public class BookingInfo extends AppCompatActivity {
 
         textLocation.setText(AvailableLockers.location);
         textDateDuration.setText(AvailableLockers.startDate.toString() + " to " +AvailableLockers.endDate.toString());
-        textTimeDuration.setText(AvailableLockers.startTime.toString() + " to " + AvailableLockers.startTime.toString());
+        textTimeDuration.setText(AvailableLockers.startTime.toString() + " to " + AvailableLockers.endTime.toString());
         textSize.setText(AvailableLockers.size);
         textStructureid.setText(Long.toString(structureID));
 

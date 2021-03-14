@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.Log;
 import android.view.View;
 
@@ -79,6 +80,7 @@ public class AvailableLockers extends AppCompatActivity {
 
         startTime = LocalTime.of(sTimeHour, sTimeMin);
         endTime = LocalTime.of(eTimeHour, eTimeMin);
+
         //returnToMain=false;
 
         AvailableLockers.BookingMultiThread dbThread = new AvailableLockers.BookingMultiThread();

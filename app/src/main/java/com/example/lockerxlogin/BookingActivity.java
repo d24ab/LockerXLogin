@@ -105,10 +105,10 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
         mYear = cal.get(Calendar.YEAR);
         mMonth = cal.get(Calendar.MONTH)+1;
         mDay = cal.get(Calendar.DAY_OF_MONTH);
-        shour = cal.get(Calendar.HOUR_OF_DAY);
-        sminute =cal.get(Calendar.MINUTE);
-        ehour = cal.get(Calendar.HOUR_OF_DAY);
-        eminute =cal.get(Calendar.MINUTE);
+        //shour = cal.get(Calendar.HOUR_OF_DAY);
+        //sminute =cal.get(Calendar.MINUTE);
+        //ehour = cal.get(Calendar.HOUR_OF_DAY);
+        //eminute =cal.get(Calendar.MINUTE);
         //setTitle(year+"-"+month+"-"+day+"-"+hour+"-"+minute);
 
 
@@ -324,6 +324,8 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                 cal.set(Calendar.HOUR_OF_DAY, hour);
                 cal.set(Calendar.MINUTE, minute);
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                shour = hour;
+                sminute = minute;
 
                 BselectedStart.setText("Start time: "+sdf.format(cal.getTime()));//change to selected time
                 startTime = LocalTime.of(hour, minute);
@@ -348,6 +350,8 @@ public class BookingActivity extends AppCompatActivity implements View.OnClickLi
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
                 BselectedEnd.setText("End time: "+sdf.format(cal.getTime()));//change to selected time
                 endTime = LocalTime.of(hour, minute);
+                ehour = hour;
+                eminute = minute;
 
             }
         }, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
