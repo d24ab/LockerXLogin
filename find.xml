@@ -1,9 +1,9 @@
 <application>
   <component name="FindSettings">
-    <option name="customScope" value="Project 'CZ3004-MDP-main'" />
-    <option name="defaultScopeName" value="Project 'CZ3004-MDP-main'" />
+    <option name="customScope" value="Directory '...\Android\app\src\main [main]'" />
+    <option name="defaultScopeName" value="Directory '...\Android\app\src\main [main]'" />
     <option name="localWholeWordsOnly" value="true" />
     <option name="LOCAL_WHOLE_WORDS_ONLY" value="true" />
-    <option name="SEARCH_SCOPE" value="Project 'CZ3004-MDP-main'" />
+    <option name="SEARCH_SCOPE" value="Directory '...\Android\app\src\main [main]'" />
   </component>
 </application>
