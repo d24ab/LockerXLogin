@@ -1,9 +1,9 @@
 <application>
   <component name="FindSettings">
-    <option name="customScope" value="File '...\Android\app\src\main\java\com\example\mdp3_android\MainActivity.java'" />
-    <option name="defaultScopeName" value="File '...\Android\app\src\main\java\com\example\mdp3_android\MainActivity.java'" />
+    <option name="customScope" value="Project 'CZ3004-MDP-main'" />
+    <option name="defaultScopeName" value="Project 'CZ3004-MDP-main'" />
     <option name="localWholeWordsOnly" value="true" />
     <option name="LOCAL_WHOLE_WORDS_ONLY" value="true" />
-    <option name="SEARCH_SCOPE" value="File '...\Android\app\src\main\java\com\example\mdp3_android\MainActivity.java'" />
+    <option name="SEARCH_SCOPE" value="Project 'CZ3004-MDP-main'" />
   </component>
 </application>
